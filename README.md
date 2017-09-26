@@ -34,3 +34,8 @@ if ($boleto->is_valid()) {
     echo "Data de vencimento: " . $boleto->get_due_date("d/m/Y");// 10/07/2008
 }
 ```
+
+# Atualizações
+
+  - 1.0 - Primeira release
+  - 1.0.1 - Adicionado mais um método de validação.

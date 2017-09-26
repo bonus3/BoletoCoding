@@ -7,7 +7,7 @@
  * 
  * @package BoletoCoding
  * @author Anderson Gonçalves (Bônus) <contato@andersonsg.com.br>
- * @Version 1.0
+ * @Version 1.0.1
  * 
  */
 
@@ -98,8 +98,8 @@ class Boleto {
      */
     private function validate() {
         //Length barcode
-        $barcode_length = strlen($this->digitable_line);
-        if (!in_array($barcode_length, array(44, 47, 48))) {
+        $digitable_line_length = strlen($this->digitable_line);
+        if (!in_array($digitable_line_length, array(44, 47, 48))) {
             return false;
         }
 
@@ -123,6 +123,15 @@ class Boleto {
             $valid = self::mod_10($this->barcode, $dv_position);
         } else {
             $valid = self::mod_11($this->barcode, $dv_position);
+            /*
+             * 
+             * If failed, try other method.
+             * Only digitable line of 48 digits
+             *              
+             */
+            if (!$valid && $digitable_line_length === 48) {
+                $valid = $this->validate_dealer_ship();
+            }
         }
         
         if ($valid) {
@@ -130,6 +139,32 @@ class Boleto {
             $this->calc_due_date();
         }
 
+        return $valid;
+    }
+    
+    /*
+     * 
+     * Chech individually the verifying digit of each block of a digitable line of 48 digits
+     * 
+     * @return Boolean
+     *      
+     */
+    private function validate_dealer_ship() {
+        $barcodes = array(
+            substr($this->digitable_line, 0, 12),
+            substr($this->digitable_line, 12, 12),
+            substr($this->digitable_line, 24, 12),
+            substr($this->digitable_line, 36, 12)
+        );
+        
+        $valid = false;
+        
+        foreach ($barcodes as $barcode) {
+            if (self::mod_11($barcode, 11)) {
+                $valid = true;
+            }
+        }
+        
         return $valid;
     }
     
