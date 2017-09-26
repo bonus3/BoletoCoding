@@ -5,7 +5,7 @@
  * Boleto Class 
  * Validation and short operations with Bank Slips
  * 
- * @package Boleto
+ * @package BoletoCoding
  * @author Anderson Gonçalves (Bônus) <contato@andersonsg.com.br>
  * @Version 1.0
  * 
