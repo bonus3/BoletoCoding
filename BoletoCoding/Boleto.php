@@ -53,7 +53,7 @@ class Boleto {
      * 
      */
     private function auto_complete() {
-        if ($this->digitable_line < 48 && strlen($this->digitable_line) !== 44) {
+        if (strlen($this->digitable_line) < 48 && strlen($this->digitable_line) !== 44) {
             while (strlen($this->digitable_line) !== 47) {
                 $this->digitable_line .= "0";
             }
@@ -98,7 +98,8 @@ class Boleto {
      */
     private function validate() {
         //Length barcode
-        if (!in_array(strlen($this->barcode), array(44, 47, 48))) {
+        $barcode_length = strlen($this->digitable_line);
+        if (!in_array($barcode_length, array(44, 47, 48))) {
             return false;
         }
 
